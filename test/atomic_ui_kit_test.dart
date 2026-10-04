@@ -9,6 +9,19 @@ const BoxShadow customShadow = BoxShadow(
   color: Color(0xFF123456),
 );
 
+const List<BoxShadow> sourceDefaultShadows = [
+  BoxShadow(
+    offset: Offset(-1, -1),
+    blurRadius: 4,
+    color: Color.fromRGBO(134, 134, 134, 0.05),
+  ),
+  BoxShadow(
+    offset: Offset(1, 1),
+    blurRadius: 4,
+    color: Color.fromRGBO(2, 2, 2, 0.25),
+  ),
+];
+
 Widget host(Widget child, {List<ThemeExtension<dynamic>>? extensions}) {
   return MaterialApp(
     theme: ThemeData(extensions: extensions),
@@ -112,6 +125,7 @@ void main() {
       await tester.pumpWidget(host(const NeuButton(child: Text('plain'))));
 
       final decoration = outerDecoration(tester, NeuButton);
+      expect(decoration.boxShadow, sourceDefaultShadows);
       expect(decoration.boxShadow, NeuTheme.defaultKeyShadows);
     });
   });
@@ -143,6 +157,7 @@ void main() {
       await tester.pumpWidget(host(const NeuContainer(child: Text('box'))));
 
       final decoration = outerDecoration(tester, NeuContainer);
+      expect(decoration.boxShadow, sourceDefaultShadows);
       expect(decoration.boxShadow, NeuTheme.defaultKeyShadows);
       expect(decoration.color, isNotNull);
       expect(decoration.borderRadius, BorderRadius.circular(4));
@@ -212,6 +227,33 @@ void main() {
     expect(selected, [0.25]);
   });
 
+  testWidgets('PercentSwitchState.deActivate clears the selection silently', (
+    tester,
+  ) async {
+    // Observable contract: deActivate() resets the visual selection so every
+    // option is dimmed, rebuilds without error, and does not notify
+    // changePercent.
+    final key = GlobalKey<PercentSwitchState>();
+    final selected = <double>[];
+    await tester.pumpWidget(
+      host(PercentSwitch(key: key, changePercent: selected.add)),
+    );
+
+    await tester.tap(find.text('25 %'));
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(selected, [0.25]);
+
+    key.currentState!.deActivate();
+    await tester.pump();
+
+    expect(tester.takeException(), isNull);
+    expect(selected, [0.25]);
+    final opacities = tester
+        .widgetList<AnimatedOpacity>(find.byType(AnimatedOpacity))
+        .map((widget) => widget.opacity);
+    expect(opacities, everyElement(0.4));
+  });
+
   testWidgets('TimeRangeSwitch reports the selected range', (tester) async {
     final selected = <TimeRangeSwitchValue>[];
     await tester.pumpWidget(host(TimeRangeSwitch(changeTime: selected.add)));
@@ -222,6 +264,23 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(selected, [TimeRangeSwitchValue.week]);
+  });
+
+  testWidgets('TimeRangeSwitch applies its color to the selected range', (
+    tester,
+  ) async {
+    const highlight = Color(0xFF123456);
+    final selected = <TimeRangeSwitchValue>[];
+    await tester.pumpWidget(
+      host(TimeRangeSwitch(changeTime: selected.add, color: highlight)),
+    );
+
+    await tester.tap(find.text('1W'));
+    await tester.pumpAndSettle();
+
+    expect(selected, [TimeRangeSwitchValue.week]);
+    expect(tester.widget<Text>(find.text('1W')).style!.color, highlight);
+    expect(tester.widget<Text>(find.text('1D')).style!.color, Colors.white);
   });
 
   testWidgets('PriceBadge renders a formatted positive percentage', (
@@ -243,6 +302,20 @@ void main() {
     );
 
     expect(find.text('-3.25%'), findsOneWidget);
+  });
+
+  testWidgets('PriceBadge keeps the percentage captured in initState', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      host(PriceBadge(percentage: Decimal.parse('12.5'))),
+    );
+    expect(find.text('+12.50%'), findsOneWidget);
+
+    await tester.pumpWidget(host(PriceBadge(percentage: Decimal.parse('-40'))));
+
+    expect(find.text('+12.50%'), findsOneWidget);
+    expect(find.text('-40.00%'), findsNothing);
   });
 
   testWidgets('DropdownMenuIcon opens and selects an item', (tester) async {

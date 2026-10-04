@@ -24,7 +24,7 @@ void main() {
         const BoxShadow(
           offset: Offset(-1, -1),
           blurRadius: 4,
-          color: Color.fromRGBO(134, 134, 134, 0.15),
+          color: Color.fromRGBO(134, 134, 134, 0.05),
         ),
       );
       expect(
@@ -32,7 +32,7 @@ void main() {
         const BoxShadow(
           offset: Offset(1, 1),
           blurRadius: 4,
-          color: Color.fromRGBO(2, 2, 2, 0.85),
+          color: Color.fromRGBO(2, 2, 2, 0.25),
         ),
       );
       expect(theme.keyBackgroundColor, isNull);
