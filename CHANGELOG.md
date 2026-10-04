@@ -11,3 +11,7 @@
   `auto_size_text`.
 - `NeuButton`'s outer radius now follows the resolved radius; the source
   widget pinned the outer radius to `4.0`.
+- `NeuContainer` now paints its restored neumorphic shadows (previously
+  commented out), themeable via `NeuTheme`.
+- `PriceBadge` now follows `percentage` changes on rebuild instead of
+  snapshotting the initial value.

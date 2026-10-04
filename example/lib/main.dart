@@ -33,15 +33,18 @@ class ExampleHomePage extends StatefulWidget {
 }
 
 class _ExampleHomePageState extends State<ExampleHomePage> {
+  static const double _pagePadding = 24;
+
   double _percent = 0.5;
   TimeRangeSwitchValue _range = TimeRangeSwitchValue.week;
 
   @override
   Widget build(BuildContext context) {
+    final availableWidth = MediaQuery.sizeOf(context).width - _pagePadding * 2;
     return Scaffold(
       appBar: AppBar(title: const Text('atomic_ui_kit example')),
       body: ListView(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(_pagePadding),
         children: [
           NeuButton(
             height: 56,
@@ -59,11 +62,17 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
           const SizedBox(height: 24),
           Text('Percent: ${(_percent * 100).round()} %'),
           PercentSwitch(
+            width: availableWidth / 4,
             onChanged: (percent) => setState(() => _percent = percent),
           ),
           const SizedBox(height: 24),
           Text('Range: ${_range.name}'),
-          TimeRangeSwitch(onChanged: (range) => setState(() => _range = range)),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: TimeRangeSwitch(
+              onChanged: (range) => setState(() => _range = range),
+            ),
+          ),
           const SizedBox(height: 24),
           Center(child: PriceBadge(percentage: Decimal.parse('12.34'))),
         ],
