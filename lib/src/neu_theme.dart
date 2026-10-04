@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-/// Marks an omitted argument in [NeuTheme.copyWith].
 const Object _unset = Object();
 
 /// Theme values shared by the neumorphic [NeuButton] and [NeuContainer]

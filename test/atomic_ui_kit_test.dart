@@ -346,9 +346,6 @@ void main() {
     testWidgets('PercentSwitchState.deActivate clears the selection silently', (
       tester,
     ) async {
-      // Observable contract: deActivate() resets the visual selection so every
-      // option is dimmed, rebuilds without error, and does not notify
-      // onChanged.
       final key = GlobalKey<PercentSwitchState>();
       final selected = <double>[];
       await tester.pumpWidget(

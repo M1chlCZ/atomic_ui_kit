@@ -104,9 +104,6 @@ void main() {
     });
 
     test('lerp handles keyShadows lists of different lengths', () {
-      // BoxShadow.lerpList interpolates the common prefix and fades the
-      // excess shadows of the longer list toward transparent instead of
-      // dropping or throwing on them.
       const short = NeuTheme(keyShadows: [_shadowA]);
       const long = NeuTheme(keyShadows: [_shadowB, _shadowA]);
 
