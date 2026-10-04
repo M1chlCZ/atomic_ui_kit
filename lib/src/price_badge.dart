@@ -20,16 +20,6 @@ class PriceBadge extends StatefulWidget {
 }
 
 class _PriceBadgeState extends State<PriceBadge> {
-  double _perc = 0.0;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.percentage != null) {
-      _perc = widget.percentage!.toDouble();
-    }
-  }
-
   String _getNum(double num) {
     if (num > 0) {
       return "+${num.toStringAsFixed(2)}";
@@ -37,16 +27,11 @@ class _PriceBadgeState extends State<PriceBadge> {
     return num.toStringAsFixed(2);
   }
 
-  double? _getWidth(double num) {
-    if (num < 0) {
-      num = num * -1.0;
-    }
-
-    if (num < 10) {
+  double _getWidth(double num) {
+    final magnitude = num.abs();
+    if (magnitude < 100) {
       return 60.0;
-    } else if (num < 100) {
-      return 60.0;
-    } else if (num < 1000) {
+    } else if (magnitude < 1000) {
       return 75.0;
     }
     return 85.0;
@@ -54,18 +39,19 @@ class _PriceBadgeState extends State<PriceBadge> {
 
   @override
   Widget build(BuildContext context) {
+    final percentage = widget.percentage?.toDouble() ?? 0.0;
     return SizedBox(
-      width: _getWidth(_perc),
+      width: _getWidth(percentage),
       child: Center(
         child: Opacity(
           opacity: 0.9,
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(
-              "${_getNum(_perc)}%",
+              "${_getNum(percentage)}%",
               maxLines: 1,
               style: TextStyle(
-                color: _perc > 0
+                color: percentage > 0
                     ? const Color(0xFF9BD421)
                     : const Color(0xFFF35656),
                 fontWeight: FontWeight.w800,

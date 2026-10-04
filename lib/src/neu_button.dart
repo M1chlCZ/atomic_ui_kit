@@ -12,7 +12,9 @@ class NeuButton extends StatelessWidget {
   /// Creates a [NeuButton].
   ///
   /// [onTap] is called when the button is tapped. [animIcon], [icon],
-  /// [imageIcon] and [child] are stacked vertically; unset slots are skipped.
+  /// [imageIcon] and [child] are stacked vertically; unset slots render an
+  /// empty placeholder. When [semanticLabel] is set, the button is wrapped in
+  /// a [Semantics] node with `button: true`.
   const NeuButton({
     super.key,
     this.color,
@@ -27,6 +29,7 @@ class NeuButton extends StatelessWidget {
     this.width,
     this.gradient,
     this.shadows,
+    this.semanticLabel,
   });
 
   /// Background color of the button surface.
@@ -80,13 +83,18 @@ class NeuButton extends StatelessWidget {
   /// When null, the ambient [NeuTheme.keyShadows] are used.
   final List<BoxShadow>? shadows;
 
+  /// Semantic label announced for the button.
+  ///
+  /// When null, no extra [Semantics] node is added.
+  final String? semanticLabel;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<NeuTheme>() ?? const NeuTheme();
     final resolvedRadius = radius ?? theme.borderRadius;
     final resolvedColor =
         color ?? theme.keyBackgroundColor ?? Theme.of(context).canvasColor;
-    return _getContainer(
+    final button = _getContainer(
       height,
       width,
       decoration: BoxDecoration(
@@ -113,6 +121,11 @@ class NeuButton extends StatelessWidget {
         ),
       ),
     );
+    final label = semanticLabel;
+    if (label == null) {
+      return button;
+    }
+    return Semantics(button: true, label: label, child: button);
   }
 
   Widget get _content => Column(

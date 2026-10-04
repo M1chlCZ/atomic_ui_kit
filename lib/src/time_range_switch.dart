@@ -21,10 +21,10 @@ enum TimeRangeSwitchValue {
 /// opaque and highlighted, the others are dimmed.
 class TimeRangeSwitch extends StatefulWidget {
   /// Creates a [TimeRangeSwitch].
-  const TimeRangeSwitch({super.key, required this.changeTime, this.color});
+  const TimeRangeSwitch({super.key, required this.onChanged, this.color});
 
   /// Called with the selected range when a range is tapped.
-  final ValueChanged<TimeRangeSwitchValue> changeTime;
+  final ValueChanged<TimeRangeSwitchValue> onChanged;
 
   /// Highlight color of the selected range.
   ///
@@ -39,6 +39,17 @@ class _TimeRangeSwitchState extends State<TimeRangeSwitch> {
   var _active = 1;
   final _duration = const Duration(milliseconds: 300);
 
+  TextStyle _labelStyle(BuildContext context, int index) {
+    final baseStyle =
+        Theme.of(context).textTheme.bodyLarge ?? const TextStyle();
+    return baseStyle.copyWith(
+      color: _active == index
+          ? widget.color ?? const Color(0xFF9BD41E)
+          : Colors.white,
+      fontSize: 16.0,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width * 0.22;
@@ -51,24 +62,10 @@ class _TimeRangeSwitchState extends State<TimeRangeSwitch> {
             opacity: _active == 4 ? 1.0 : 0.4,
             duration: _duration,
             child: TextButton(
-              onPressed: () {
-                setState(() {
-                  _active = 4;
-                });
-                widget.changeTime(TimeRangeSwitchValue.year);
-              },
+              onPressed: () => _select(TimeRangeSwitchValue.year, 4),
               child: FittedBox(
                 fit: BoxFit.scaleDown,
-                child: Text(
-                  '1Y',
-                  maxLines: 1,
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    color: _active == 4
-                        ? widget.color ?? const Color(0xFF9BD41E)
-                        : Colors.white,
-                    fontSize: 16.0,
-                  ),
-                ),
+                child: Text('1Y', maxLines: 1, style: _labelStyle(context, 4)),
               ),
             ),
           ),
@@ -79,24 +76,10 @@ class _TimeRangeSwitchState extends State<TimeRangeSwitch> {
             opacity: _active == 3 ? 1.0 : 0.4,
             duration: _duration,
             child: TextButton(
-              onPressed: () {
-                setState(() {
-                  _active = 3;
-                });
-                widget.changeTime(TimeRangeSwitchValue.month);
-              },
+              onPressed: () => _select(TimeRangeSwitchValue.month, 3),
               child: FittedBox(
                 fit: BoxFit.scaleDown,
-                child: Text(
-                  '1M',
-                  maxLines: 1,
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    color: _active == 3
-                        ? widget.color ?? const Color(0xFF9BD41E)
-                        : Colors.white,
-                    fontSize: 16.0,
-                  ),
-                ),
+                child: Text('1M', maxLines: 1, style: _labelStyle(context, 3)),
               ),
             ),
           ),
@@ -107,24 +90,10 @@ class _TimeRangeSwitchState extends State<TimeRangeSwitch> {
             opacity: _active == 2 ? 1.0 : 0.4,
             duration: _duration,
             child: TextButton(
-              onPressed: () {
-                setState(() {
-                  _active = 2;
-                });
-                widget.changeTime(TimeRangeSwitchValue.week);
-              },
+              onPressed: () => _select(TimeRangeSwitchValue.week, 2),
               child: FittedBox(
                 fit: BoxFit.scaleDown,
-                child: Text(
-                  '1W',
-                  maxLines: 1,
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    color: _active == 2
-                        ? widget.color ?? const Color(0xFF9BD41E)
-                        : Colors.white,
-                    fontSize: 16.0,
-                  ),
-                ),
+                child: Text('1W', maxLines: 1, style: _labelStyle(context, 2)),
               ),
             ),
           ),
@@ -135,29 +104,22 @@ class _TimeRangeSwitchState extends State<TimeRangeSwitch> {
             opacity: _active == 1 ? 1.0 : 0.4,
             duration: _duration,
             child: TextButton(
-              onPressed: () {
-                setState(() {
-                  _active = 1;
-                });
-                widget.changeTime(TimeRangeSwitchValue.day);
-              },
+              onPressed: () => _select(TimeRangeSwitchValue.day, 1),
               child: FittedBox(
                 fit: BoxFit.scaleDown,
-                child: Text(
-                  '1D',
-                  maxLines: 1,
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    color: _active == 1
-                        ? widget.color ?? const Color(0xFF9BD41E)
-                        : Colors.white,
-                    fontSize: 16.0,
-                  ),
-                ),
+                child: Text('1D', maxLines: 1, style: _labelStyle(context, 1)),
               ),
             ),
           ),
         ),
       ],
     );
+  }
+
+  void _select(TimeRangeSwitchValue value, int index) {
+    setState(() {
+      _active = index;
+    });
+    widget.onChanged(value);
   }
 }

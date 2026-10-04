@@ -8,6 +8,8 @@ class DropdownMenuIcon<T> extends StatefulWidget {
   /// [items] are shown in the overlay, [onChange] receives the selected value
   /// and its index, and [currentIndex] selects the initially shown item
   /// (`-1` shows [child] instead).
+  ///
+  /// [currentIndex] must be `-1` or a valid index into [items].
   const DropdownMenuIcon({
     super.key,
     this.hideIcon = false,
@@ -19,7 +21,10 @@ class DropdownMenuIcon<T> extends StatefulWidget {
     this.leadingIcon = false,
     this.onChange,
     required this.currentIndex,
-  });
+  }) : assert(
+         currentIndex == -1 || currentIndex < items.length,
+         'currentIndex must be -1 or a valid index into items.',
+       );
 
   /// The child widget for the button. It is ignored while [currentIndex] is
   /// not `-1`.
@@ -27,7 +32,8 @@ class DropdownMenuIcon<T> extends StatefulWidget {
 
   /// Called when the selected option changes.
   ///
-  /// It receives the selected value and the index of the option.
+  /// It receives the selected value and the index of the option. When null,
+  /// selecting an option still updates the button but reports nothing.
   final void Function(T, int)? onChange;
 
   /// The options shown in the dropdown.
@@ -62,10 +68,11 @@ class _DropdownMenuIconState<T> extends State<DropdownMenuIcon<T>>
   final LayerLink _layerLink = LayerLink();
   OverlayEntry? _overlayEntry;
   bool _isOpen = false;
+  bool _isClosing = false;
   int _currentIndex = -1;
-  AnimationController? _animationController;
-  Animation<double>? _expandAnimation;
-  Animation<double>? _rotateAnimation;
+  late final AnimationController _animationController;
+  late final Animation<double> _expandAnimation;
+  late final Animation<double> _rotateAnimation;
 
   @override
   void initState() {
@@ -77,17 +84,30 @@ class _DropdownMenuIconState<T> extends State<DropdownMenuIcon<T>>
       duration: const Duration(milliseconds: 200),
     );
     _expandAnimation = CurvedAnimation(
-      parent: _animationController!,
+      parent: _animationController,
       curve: Curves.easeInOut,
     );
     _rotateAnimation = Tween(begin: 0.0, end: 0.5).animate(
-      CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut),
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
     );
   }
 
   @override
+  void dispose() {
+    _removeOverlayEntry();
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  int get _visibleIndex =>
+      _currentIndex >= 0 && _currentIndex < widget.items.length
+      ? _currentIndex
+      : -1;
+
+  @override
   Widget build(BuildContext context) {
     final style = widget.dropdownButtonStyle;
+    final visibleIndex = _visibleIndex;
     return CompositedTransformTarget(
       link: _layerLink,
       child: SizedBox(
@@ -111,14 +131,14 @@ class _DropdownMenuIconState<T> extends State<DropdownMenuIcon<T>>
                 : TextDirection.ltr,
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (_currentIndex == -1) ...[
+              if (visibleIndex == -1) ...[
                 widget.child,
               ] else ...[
-                widget.items[_currentIndex],
+                widget.items[visibleIndex],
               ],
               if (!widget.hideIcon)
                 RotationTransition(
-                  turns: _rotateAnimation!,
+                  turns: _rotateAnimation,
                   child: widget.icon ?? const Icon(Icons.arrow_drop_down_sharp),
                 ),
             ],
@@ -129,9 +149,14 @@ class _DropdownMenuIconState<T> extends State<DropdownMenuIcon<T>>
   }
 
   OverlayEntry _createOverlayEntry() {
-    final renderBox = context.findRenderObject() as RenderBox?;
+    final renderBox = context.findRenderObject();
+    if (renderBox is! RenderBox) {
+      throw FlutterError(
+        'DropdownMenuIcon cannot open before it has been laid out.',
+      );
+    }
 
-    final size = renderBox!.size;
+    final size = renderBox.size;
 
     final offset = renderBox.localToGlobal(Offset.zero);
     final topOffset = offset.dy + size.height + 5;
@@ -160,7 +185,7 @@ class _DropdownMenuIconState<T> extends State<DropdownMenuIcon<T>>
                     color: widget.dropdownStyle.color,
                     child: SizeTransition(
                       alignment: const AlignmentDirectional(-1.0, 1.0),
-                      sizeFactor: _expandAnimation!,
+                      sizeFactor: _expandAnimation,
                       child: ConstrainedBox(
                         constraints:
                             widget.dropdownStyle.constraints ??
@@ -178,8 +203,8 @@ class _DropdownMenuIconState<T> extends State<DropdownMenuIcon<T>>
                             return InkWell(
                               onTap: () {
                                 setState(() => _currentIndex = item.key);
-                                widget.onChange!(
-                                  item.value.value as T,
+                                widget.onChange?.call(
+                                  item.value.value,
                                   item.key,
                                 );
                                 _toggleDropdown();
@@ -200,19 +225,41 @@ class _DropdownMenuIconState<T> extends State<DropdownMenuIcon<T>>
     );
   }
 
-  void _toggleDropdown({bool close = false}) async {
+  Future<void> _toggleDropdown({bool close = false}) async {
     if (_isOpen || close) {
-      await _animationController!.reverse();
-      _overlayEntry!.remove();
-      setState(() {
-        _isOpen = false;
-      });
+      await _closeDropdown();
     } else {
-      _overlayEntry = _createOverlayEntry();
-      Overlay.of(context).insert(_overlayEntry!);
-      setState(() => _isOpen = true);
-      _animationController!.forward();
+      _openDropdown();
     }
+  }
+
+  void _openDropdown() {
+    if (_isOpen || _isClosing || !mounted) {
+      return;
+    }
+    _overlayEntry = _createOverlayEntry();
+    Overlay.of(context).insert(_overlayEntry!);
+    setState(() => _isOpen = true);
+    _animationController.forward();
+  }
+
+  Future<void> _closeDropdown() async {
+    if (!_isOpen || _isClosing) {
+      return;
+    }
+    _isClosing = true;
+    await _animationController.reverse();
+    _isClosing = false;
+    _removeOverlayEntry();
+    if (mounted) {
+      setState(() => _isOpen = false);
+    }
+  }
+
+  void _removeOverlayEntry() {
+    final entry = _overlayEntry;
+    _overlayEntry = null;
+    entry?.remove();
   }
 }
 
@@ -222,17 +269,19 @@ class _DropdownMenuIconState<T> extends State<DropdownMenuIcon<T>>
 /// [DropdownMenuIcon.onChange].
 class DropdownItem<T> extends StatelessWidget {
   /// Creates a [DropdownItem] holding [value] and showing [child].
-  const DropdownItem({super.key, this.value, this.child});
+  const DropdownItem({super.key, required this.value, required this.child});
 
   /// Value reported when this item is selected.
-  final T? value;
+  ///
+  /// [T] may itself be a nullable type to allow `null` values.
+  final T value;
 
   /// Widget shown for this item.
-  final Widget? child;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    return child!;
+    return child;
   }
 }
 

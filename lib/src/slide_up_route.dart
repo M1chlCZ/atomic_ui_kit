@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 /// Creates a route that slides [page] up from the bottom of the screen.
-Route<void> slideUpRoute(Widget page) {
-  return PageRouteBuilder<void>(
+Route<T> slideUpRoute<T>(Widget page) {
+  return PageRouteBuilder<T>(
     pageBuilder: (_, _, _) => page,
     transitionDuration: const Duration(milliseconds: 500),
     transitionsBuilder: (_, Animation<double> animation, _, Widget child) {

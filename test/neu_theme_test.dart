@@ -102,5 +102,26 @@ void main() {
       expect(mid.keyShadows, hasLength(1));
       expect(a.lerp(null, 0.5), a);
     });
+
+    test('lerp handles keyShadows lists of different lengths', () {
+      // BoxShadow.lerpList interpolates the common prefix and fades the
+      // excess shadows of the longer list toward transparent instead of
+      // dropping or throwing on them.
+      const short = NeuTheme(keyShadows: [_shadowA]);
+      const long = NeuTheme(keyShadows: [_shadowB, _shadowA]);
+
+      final mid = short.lerp(long, 0.5);
+      expect(mid.keyShadows, hasLength(2));
+      expect(mid.keyShadows.first, BoxShadow.lerp(_shadowA, _shadowB, 0.5));
+      expect(mid.keyShadows.last, _shadowA.scale(0.5));
+
+      final reversed = long.lerp(short, 0.5);
+      expect(reversed.keyShadows, hasLength(2));
+      expect(
+        reversed.keyShadows.first,
+        BoxShadow.lerp(_shadowB, _shadowA, 0.5),
+      );
+      expect(reversed.keyShadows.last, _shadowA.scale(0.5));
+    });
   });
 }

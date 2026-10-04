@@ -5,13 +5,16 @@ import 'package:flutter/rendering.dart';
 class AnimatedListItem extends StatefulWidget {
   /// Creates an [AnimatedListItem] wrapping [child].
   ///
-  /// [keepAlive] keeps the item alive in lazy lists, and [scrollDirection]
-  /// selects the direction the item animates in from.
+  /// [keepAlive] keeps the item alive in lazy lists, [scrollDirection] selects
+  /// the direction the item animates in from, [height] fixes the item height
+  /// and [width] fixes its width.
   const AnimatedListItem({
     super.key,
     required this.child,
     this.keepAlive = false,
     this.scrollDirection = ScrollDirection.forward,
+    this.height = 100,
+    this.width,
   });
 
   /// Widget shown by the item.
@@ -22,6 +25,14 @@ class AnimatedListItem extends StatefulWidget {
 
   /// Direction the item animates in from.
   final ScrollDirection scrollDirection;
+
+  /// Height of the item.
+  final double height;
+
+  /// Width of the item.
+  ///
+  /// When null, the item spans the full screen width.
+  final double? width;
 
   @override
   State<AnimatedListItem> createState() => _AnimatedListItemState();
@@ -92,8 +103,8 @@ class _AnimatedListItemState extends State<AnimatedListItem>
   Widget build(BuildContext context) {
     super.build(context);
     return SizedBox(
-      height: 100,
-      width: MediaQuery.of(context).size.width,
+      height: widget.height,
+      width: widget.width ?? MediaQuery.of(context).size.width,
       child: AnimatedBuilder(
         animation: animationController,
         child: widget.child,

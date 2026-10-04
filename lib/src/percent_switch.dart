@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 /// A row of buttons that reports the selected stake percentage.
@@ -9,11 +11,11 @@ class PercentSwitch extends StatefulWidget {
   ///
   /// [width] is the width of a single option. When null, it is 23 % of the
   /// screen width.
-  const PercentSwitch({super.key, required this.changePercent, this.width});
+  const PercentSwitch({super.key, required this.onChanged, this.width});
 
   /// Called with the selected percentage, expressed as a fraction between
   /// `0.25` and `1.0`.
-  final ValueChanged<double> changePercent;
+  final ValueChanged<double> onChanged;
 
   /// Width of a single option.
   final double? width;
@@ -24,13 +26,48 @@ class PercentSwitch extends StatefulWidget {
 
 /// State for [PercentSwitch] that exposes [deActivate].
 class PercentSwitchState extends State<PercentSwitch> {
-  var _active = 5;
+  static const int _inactive = 5;
+  var _active = _inactive;
   final _duration = const Duration(milliseconds: 300);
+  Timer? _pendingSelection;
+  var _selectionGeneration = 0;
 
   /// Clears the selection so all options are dimmed.
+  ///
+  /// A selection that is still waiting for its delayed visual update is
+  /// discarded, so it cannot re-activate the switch afterwards.
   void deActivate() {
+    _selectionGeneration++;
+    _pendingSelection?.cancel();
+    _pendingSelection = null;
+    if (!mounted) {
+      return;
+    }
     setState(() {
-      _active = 5;
+      _active = _inactive;
+    });
+  }
+
+  @override
+  void dispose() {
+    _selectionGeneration++;
+    _pendingSelection?.cancel();
+    _pendingSelection = null;
+    super.dispose();
+  }
+
+  void _select(double percent, int option) {
+    widget.onChanged(percent);
+    _selectionGeneration++;
+    final generation = _selectionGeneration;
+    _pendingSelection?.cancel();
+    _pendingSelection = Timer(_duration, () {
+      if (!mounted || generation != _selectionGeneration) {
+        return;
+      }
+      setState(() {
+        _active = option;
+      });
     });
   }
 
@@ -47,14 +84,7 @@ class PercentSwitchState extends State<PercentSwitch> {
               opacity: _active == 4 ? 1.0 : 0.4,
               duration: _duration,
               child: TextButton(
-                onPressed: () async {
-                  widget.changePercent(0.25);
-                  await Future.delayed(const Duration(milliseconds: 300), () {
-                    setState(() {
-                      _active = 4;
-                    });
-                  });
-                },
+                onPressed: () => _select(0.25, 4),
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text(
@@ -72,14 +102,7 @@ class PercentSwitchState extends State<PercentSwitch> {
               opacity: _active == 3 ? 1.0 : 0.4,
               duration: _duration,
               child: TextButton(
-                onPressed: () async {
-                  widget.changePercent(0.5);
-                  await Future.delayed(const Duration(milliseconds: 300), () {
-                    setState(() {
-                      _active = 3;
-                    });
-                  });
-                },
+                onPressed: () => _select(0.5, 3),
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text(
@@ -97,14 +120,7 @@ class PercentSwitchState extends State<PercentSwitch> {
               opacity: _active == 2 ? 1.0 : 0.4,
               duration: _duration,
               child: TextButton(
-                onPressed: () async {
-                  widget.changePercent(0.75);
-                  await Future.delayed(const Duration(milliseconds: 300), () {
-                    setState(() {
-                      _active = 2;
-                    });
-                  });
-                },
+                onPressed: () => _select(0.75, 2),
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text(
@@ -122,14 +138,7 @@ class PercentSwitchState extends State<PercentSwitch> {
               opacity: _active == 1 ? 1.0 : 0.4,
               duration: _duration,
               child: TextButton(
-                onPressed: () async {
-                  widget.changePercent(1.0);
-                  await Future.delayed(const Duration(milliseconds: 300), () {
-                    setState(() {
-                      _active = 1;
-                    });
-                  });
-                },
+                onPressed: () => _select(1.0, 1),
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text(

@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 /// A flat, optionally bordered button with an ink splash.
 ///
 /// [animIcon], [icon], [imageIcon] and [child] are stacked vertically; unset
-/// slots are skipped.
+/// slots render an empty placeholder. When [semanticLabel] is set, the button
+/// is wrapped in a [Semantics] node with `button: true`.
 class AppFlatButton extends StatelessWidget {
   /// Creates an [AppFlatButton].
   const AppFlatButton({
@@ -21,6 +22,7 @@ class AppFlatButton extends StatelessWidget {
     this.width,
     this.padding,
     this.borderWidth,
+    this.semanticLabel,
   });
 
   /// Border radius of the button.
@@ -70,9 +72,14 @@ class AppFlatButton extends StatelessWidget {
   /// Defaults to `1.5` when [borderColor] is set.
   final double? borderWidth;
 
+  /// Semantic label announced for the button.
+  ///
+  /// When null, no extra [Semantics] node is added.
+  final String? semanticLabel;
+
   @override
   Widget build(BuildContext context) {
-    return _getContainer(
+    final button = _getContainer(
       height,
       width,
       decoration: BoxDecoration(
@@ -106,6 +113,11 @@ class AppFlatButton extends StatelessWidget {
         ),
       ),
     );
+    final label = semanticLabel;
+    if (label == null) {
+      return button;
+    }
+    return Semantics(button: true, label: label, child: button);
   }
 
   Container _getContainer(
