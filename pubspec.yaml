@@ -1,0 +1,22 @@
+name: atomic_ui_kit
+description: >-
+  A small kit of domain-free Flutter widgets: neumorphic buttons and
+  containers, gradient text, dropdown menu icon, percent and time range
+  switches, and more.
+version: 0.1.0
+repository: https://github.com/M1chlCZ/Rocketbot-App-New/tree/main/packages/atomic_ui_kit
+issue_tracker: https://github.com/M1chlCZ/Rocketbot-App-New/issues
+topics:
+  - widget
+  - ui
+  - neumorphic
+  - components
+environment:
+  sdk: ^3.11.0
+dependencies:
+  flutter:
+    sdk: flutter
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
