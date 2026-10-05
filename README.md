@@ -101,3 +101,12 @@ DropdownMenuIcon<String>(
 
 `atomic_ui_kit` is pure Flutter with no native code or platform plugins, so it
 runs on Android, iOS, web, macOS, Windows and Linux.
+
+## Example
+
+A runnable app that shows the widgets lives in [`example/`](example/).
+
+## Screenshot
+
+A screenshot for the pub.dev listing is not included yet. Run the example app
+to see the widgets rendered with `NeuTheme`.
