@@ -1,3 +1,7 @@
+## 0.1.3
+
+- Rewrite the README for a shorter pub.dev listing.
+
 ## 0.1.2
 
 - Removed the screenshot regeneration notes from the README.

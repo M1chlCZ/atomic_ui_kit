@@ -3,7 +3,7 @@ description: >-
   A small kit of domain-free Flutter widgets: neumorphic buttons and
   containers, gradient text, a dropdown menu icon, percent and time range
   switches, and badges.
-version: 0.1.2
+version: 0.1.3
 repository: https://github.com/M1chlCZ/atomic_ui_kit
 issue_tracker: https://github.com/M1chlCZ/atomic_ui_kit/issues
 topics:

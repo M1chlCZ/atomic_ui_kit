@@ -1,11 +1,9 @@
 # atomic_ui_kit
 
-A small kit of domain-free Flutter widgets. The kit has neumorphic buttons
-and containers, gradient text, a dropdown menu icon, percent and time range
-switches, and price badges.
-
-The widgets use only Flutter and `decimal`. They do not know about app
-models, state management, or platform plugins.
+A small kit of domain-free Flutter widgets: neumorphic buttons and containers,
+gradient text, switches, badges, and more. The widgets use only Flutter and
+`decimal`. They do not know about app models, state management, or platform
+plugins.
 
 ## Widgets
 
@@ -26,14 +24,11 @@ models, state management, or platform plugins.
 
 ## Install
 
-```yaml
-dependencies:
-  atomic_ui_kit: ^0.1.2
+```bash
+flutter pub add atomic_ui_kit
 ```
 
 ## Usage
-
-### NeuButton and NeuTheme
 
 Register `NeuTheme` on the ambient `ThemeData` to restyle every neu widget in
 the subtree. Then use `NeuButton`:
@@ -59,39 +54,20 @@ MaterialApp(
 );
 ```
 
-### PercentSwitch
+`PercentSwitch` reports 0.25, 0.5, 0.75, or 1.0. `TimeRangeSwitch` reports
+`TimeRangeSwitchValue.day`, `.week`, `.month`, or `.year`:
 
 ```dart
 PercentSwitch(
   onChanged: (percent) {
-    // `percent` is 0.25, 0.5, 0.75 or 1.0.
+    // 0.25, 0.5, 0.75 or 1.0
   },
 );
-```
 
-### TimeRangeSwitch
-
-```dart
 TimeRangeSwitch(
   onChanged: (range) {
-    // `range` is one of TimeRangeSwitchValue.day, .week, .month or .year.
+    // TimeRangeSwitchValue.day, .week, .month or .year
   },
-);
-```
-
-### DropdownMenuIcon
-
-```dart
-DropdownMenuIcon<String>(
-  currentIndex: 0,
-  items: const [
-    DropdownItem<String>(value: 'one', child: Text('One')),
-    DropdownItem<String>(value: 'two', child: Text('Two')),
-  ],
-  onChange: (value, index) {
-    // `value` is the selected DropdownItem value.
-  },
-  child: const Text('Choose'),
 );
 ```
 
