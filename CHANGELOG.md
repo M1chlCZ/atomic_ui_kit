@@ -1,3 +1,10 @@
+## 0.1.1
+
+- Added a widget gallery screenshot to the pub.dev listing.
+- Reworked the example app into a two-page showcase: a components gallery
+  and a trading dashboard, plus an integration test that captures the
+  screenshot on a simulator.
+
 ## 0.1.0
 
 - Initial release.

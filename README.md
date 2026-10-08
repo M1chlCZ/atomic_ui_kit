@@ -25,12 +25,9 @@ plugins.
 
 ## Install
 
-`atomic_ui_kit` is not published on pub.dev yet. Depend on it with a path:
-
 ```yaml
 dependencies:
-  atomic_ui_kit:
-    path: packages/atomic_ui_kit
+  atomic_ui_kit: ^0.1.1
 ```
 
 ## Usage
@@ -104,9 +101,24 @@ runs on Android, iOS, web, macOS, Windows and Linux.
 
 ## Example
 
-A runnable app that shows the widgets lives in [`example/`](example/).
+A runnable app that shows the widgets lives in [`example/`](example/). It has
+a components gallery and a small trading dashboard that uses the widgets
+together.
 
-## Screenshot
+## Screenshots
 
-A screenshot for the pub.dev listing is not included yet. Run the example app
-to see the widgets rendered with `NeuTheme`.
+<p>
+  <img src="screenshots/components.png" width="240" alt="Widget gallery" />
+</p>
+
+The screenshot comes from the example app on an iPhone simulator. To capture
+it again, generate the platform folders with
+`flutter create --platforms=ios .` inside `example/`, then run:
+
+```sh
+cd example
+flutter drive \
+  --driver=test_driver/screenshot_driver.dart \
+  --target=integration_test/screenshots_test.dart \
+  -d <device-id>
+```

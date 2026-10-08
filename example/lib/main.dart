@@ -1,6 +1,8 @@
-import 'package:atomic_ui_kit/atomic_ui_kit.dart';
-import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
+
+import 'src/app_theme.dart';
+import 'src/components_page.dart';
+import 'src/trading_page.dart';
 
 void main() {
   runApp(const ExampleApp());
@@ -13,68 +15,44 @@ class ExampleApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'atomic_ui_kit example',
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        canvasColor: const Color(0xFF1E2638),
-        extensions: const [
-          NeuTheme(keyBackgroundColor: Color(0xFF252F45), borderRadius: 12),
-        ],
-      ),
-      home: const ExampleHomePage(),
+      debugShowCheckedModeBanner: false,
+      theme: buildAppTheme(),
+      home: const HomeShell(),
     );
   }
 }
 
-class ExampleHomePage extends StatefulWidget {
-  const ExampleHomePage({super.key});
+class HomeShell extends StatefulWidget {
+  const HomeShell({super.key});
 
   @override
-  State<ExampleHomePage> createState() => _ExampleHomePageState();
+  State<HomeShell> createState() => _HomeShellState();
 }
 
-class _ExampleHomePageState extends State<ExampleHomePage> {
-  static const double _pagePadding = 24;
-
-  double _percent = 0.5;
-  TimeRangeSwitchValue _range = TimeRangeSwitchValue.week;
+class _HomeShellState extends State<HomeShell> {
+  var _index = 0;
 
   @override
   Widget build(BuildContext context) {
-    final availableWidth = MediaQuery.sizeOf(context).width - _pagePadding * 2;
     return Scaffold(
-      appBar: AppBar(title: const Text('atomic_ui_kit example')),
-      body: ListView(
-        padding: const EdgeInsets.all(_pagePadding),
-        children: [
-          NeuButton(
-            height: 56,
-            width: double.infinity,
-            semanticLabel: 'Buy',
-            onTap: () {},
-            child: const Text('Buy'),
+      body: IndexedStack(
+        index: _index,
+        children: const [ComponentsPage(), TradingPage()],
+      ),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _index,
+        onDestinationSelected: (index) => setState(() => _index = index),
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.widgets_outlined),
+            selectedIcon: Icon(Icons.widgets),
+            label: 'Components',
           ),
-          const SizedBox(height: 24),
-          const NeuContainer(
-            height: 80,
-            width: double.infinity,
-            child: Center(child: Text('NeuContainer')),
+          NavigationDestination(
+            icon: Icon(Icons.show_chart_outlined),
+            selectedIcon: Icon(Icons.show_chart),
+            label: 'Trading',
           ),
-          const SizedBox(height: 24),
-          Text('Percent: ${(_percent * 100).round()} %'),
-          PercentSwitch(
-            width: availableWidth / 4,
-            onChanged: (percent) => setState(() => _percent = percent),
-          ),
-          const SizedBox(height: 24),
-          Text('Range: ${_range.name}'),
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: TimeRangeSwitch(
-              onChanged: (range) => setState(() => _range = range),
-            ),
-          ),
-          const SizedBox(height: 24),
-          Center(child: PriceBadge(percentage: Decimal.parse('12.34'))),
         ],
       ),
     );
