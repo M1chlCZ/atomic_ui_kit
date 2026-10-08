@@ -1,33 +1,34 @@
 # atomic_ui_kit
 
-A small kit of domain-free Flutter widgets: neumorphic buttons and
-containers, gradient text, a dropdown menu icon, percent and time range
-switches, price badges, and more. The widgets depend only on Flutter and
-`decimal`; they know nothing about app models, state management or platform
-plugins.
+A small kit of domain-free Flutter widgets. The kit has neumorphic buttons
+and containers, gradient text, a dropdown menu icon, percent and time range
+switches, and price badges.
+
+The widgets use only Flutter and `decimal`. They do not know about app
+models, state management, or platform plugins.
 
 ## Widgets
 
 | Widget | Description |
 | --- | --- |
-| `NeuButton` | Neumorphic button with an ink splash and optional gradient. |
+| `NeuButton` | Neumorphic button with an ink splash and an optional gradient. |
 | `NeuContainer` | Neumorphic container that paints the neu shadows. |
-| `NeuTheme` | `ThemeExtension` with the shared neu shadows, background color and radius. |
-| `AppFlatButton` | Flat, optionally bordered button with an ink splash. |
-| `GradientText` | Text painted with a `Gradient` through a `ShaderMask`. |
+| `NeuTheme` | `ThemeExtension` with the shared neu shadows, background color, and radius. |
+| `AppFlatButton` | Flat button with an ink splash and an optional border. |
+| `GradientText` | Paints text with a `Gradient` through a `ShaderMask`. |
 | `Indicator` | Colored shape followed by a bold label. |
 | `DropdownMenuIcon` | Button that opens an overlay menu and reports the selected item. |
-| `AnimatedListItem` | List item that scales and tilts into place when it is first built. |
-| `PercentSwitch` | Row of 25 %, 50 %, 75 % and MAX options. |
-| `TimeRangeSwitch` | Row of 1Y, 1M, 1W and 1D options. |
-| `PriceBadge` | Price change badge, green when positive and red otherwise. |
+| `AnimatedListItem` | List item that scales and tilts into place on the first build. |
+| `PercentSwitch` | Row of 25 %, 50 %, 75 %, and MAX options. |
+| `TimeRangeSwitch` | Row of 1Y, 1M, 1W, and 1D options. |
+| `PriceBadge` | Price change badge: green for a positive change, red for a negative change. |
 | `slideUpRoute` | `Route` that slides a page up from the bottom of the screen. |
 
 ## Install
 
 ```yaml
 dependencies:
-  atomic_ui_kit: ^0.1.1
+  atomic_ui_kit: ^0.1.2
 ```
 
 ## Usage
@@ -35,7 +36,7 @@ dependencies:
 ### NeuButton and NeuTheme
 
 Register `NeuTheme` on the ambient `ThemeData` to restyle every neu widget in
-the subtree, then use `NeuButton`:
+the subtree. Then use `NeuButton`:
 
 ```dart
 MaterialApp(
@@ -96,29 +97,16 @@ DropdownMenuIcon<String>(
 
 ## Platforms
 
-`atomic_ui_kit` is pure Flutter with no native code or platform plugins, so it
-runs on Android, iOS, web, macOS, Windows and Linux.
+`atomic_ui_kit` is pure Flutter with no native code and no platform plugins.
+It runs on Android, iOS, web, macOS, Windows, and Linux.
 
 ## Example
 
-A runnable app that shows the widgets lives in [`example/`](example/). It has
-a components gallery and a small trading dashboard that uses the widgets
-together.
+A runnable app in [`example/`](example/) shows the widgets. It has a
+components gallery and a trading dashboard.
 
 ## Screenshots
 
 <p>
   <img src="screenshots/components.png" width="240" alt="Widget gallery" />
 </p>
-
-The screenshot comes from the example app on an iPhone simulator. To capture
-it again, generate the platform folders with
-`flutter create --platforms=ios .` inside `example/`, then run:
-
-```sh
-cd example
-flutter drive \
-  --driver=test_driver/screenshot_driver.dart \
-  --target=integration_test/screenshots_test.dart \
-  -d <device-id>
-```

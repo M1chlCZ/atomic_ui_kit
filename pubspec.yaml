@@ -1,9 +1,9 @@
 name: atomic_ui_kit
 description: >-
   A small kit of domain-free Flutter widgets: neumorphic buttons and
-  containers, gradient text, dropdown menu icon, percent and time range
-  switches, and more.
-version: 0.1.1
+  containers, gradient text, a dropdown menu icon, percent and time range
+  switches, and badges.
+version: 0.1.2
 repository: https://github.com/M1chlCZ/atomic_ui_kit
 issue_tracker: https://github.com/M1chlCZ/atomic_ui_kit/issues
 topics:
@@ -13,8 +13,8 @@ topics:
   - components
 screenshots:
   - description: >-
-      Widget gallery rendered with NeuTheme: buttons, containers, gradient
-      text, switches, badges and indicators.
+      Widget gallery with NeuTheme: buttons, containers, gradient text,
+      switches, badges, and indicators.
     path: screenshots/components.png
 environment:
   sdk: ^3.11.0

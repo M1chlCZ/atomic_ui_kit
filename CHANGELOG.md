@@ -1,3 +1,8 @@
+## 0.1.2
+
+- Removed the screenshot regeneration notes from the README.
+- Shortened the README text.
+
 ## 0.1.1
 
 - Added a widget gallery screenshot to the pub.dev listing.
