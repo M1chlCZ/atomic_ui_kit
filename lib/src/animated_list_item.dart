@@ -5,8 +5,8 @@ import 'package:flutter/rendering.dart';
 class AnimatedListItem extends StatefulWidget {
   /// Creates an [AnimatedListItem] wrapping [child].
   ///
-  /// [keepAlive] keeps the item alive in lazy lists, [scrollDirection] selects
-  /// the direction the item animates in from, [height] fixes the item height
+  /// [keepAlive] keeps the item alive in lazy lists. [scrollDirection] selects
+  /// the direction the item animates in from. [height] fixes the item height,
   /// and [width] fixes its width.
   const AnimatedListItem({
     super.key,
@@ -20,7 +20,7 @@ class AnimatedListItem extends StatefulWidget {
   /// Widget shown by the item.
   final Widget child;
 
-  /// Whether the item should be kept alive in lazy lists.
+  /// Whether to keep the item alive in lazy lists.
   final bool keepAlive;
 
   /// Direction the item animates in from.

@@ -20,7 +20,7 @@ class GradientText extends StatelessWidget {
   /// The gradient painted over the text.
   final Gradient gradient;
 
-  /// How the text should be aligned horizontally.
+  /// Horizontal alignment of the text.
   final TextAlign? align;
 
   @override

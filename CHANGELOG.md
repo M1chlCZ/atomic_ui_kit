@@ -1,3 +1,7 @@
+## 0.1.4
+
+- Documentation and internal cleanup.
+
 ## 0.1.3
 
 - Rewrite the README for a shorter pub.dev listing.

@@ -62,7 +62,7 @@ class NeuContainer extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(resolvedRadius)),
         boxShadow: shadows ?? theme.keyShadows,
       ),
-      child: Padding(padding: const EdgeInsets.all(0.0), child: child),
+      child: child,
     );
   }
 
@@ -70,7 +70,7 @@ class NeuContainer extends StatelessWidget {
     double? height,
     double? width, {
     required BoxDecoration decoration,
-    required Widget child,
+    required Widget? child,
   }) {
     if (height != null) {
       assert(width != null);

@@ -273,7 +273,7 @@ class DropdownItem<T> extends StatelessWidget {
 
   /// Value reported when this item is selected.
   ///
-  /// [T] may itself be a nullable type to allow `null` values.
+  /// [T] can be a nullable type to allow `null` values.
   final T value;
 
   /// Widget shown for this item.
