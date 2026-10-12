@@ -22,6 +22,8 @@ const Object _unset = Object();
 ///
 /// Widgets resolve each value in this order: the explicit widget argument,
 /// the [NeuTheme] extension, this extension, and the built-in defaults.
+///
+/// Use [AtomicTheme.light] or [AtomicTheme.dark] for ready-made palettes.
 @immutable
 class AtomicTheme extends ThemeExtension<AtomicTheme> {
   /// Creates an [AtomicTheme].
@@ -36,6 +38,53 @@ class AtomicTheme extends ThemeExtension<AtomicTheme> {
     this.depth = defaultDepth,
     this.radius = defaultRadius,
   });
+
+  /// Creates a light neumorphic theme.
+  ///
+  /// [baseColor] defaults to a soft cool white. When [lightShadow] or
+  /// [darkShadow] is null, the color is derived from [baseColor]: a bright
+  /// top-left shadow and a muted blue-grey bottom-right shadow. The presets
+  /// use a larger radius than the base constructor.
+  factory AtomicTheme.light({
+    Color baseColor = const Color(0xFFE9EDF4),
+    Color? lightShadow,
+    Color? darkShadow,
+    double depth = defaultDepth,
+    double radius = 16,
+  }) {
+    return AtomicTheme(
+      baseColor: baseColor,
+      lightShadow:
+          lightShadow ?? _mixShadow(baseColor, Colors.white, 0.70, 0.85),
+      darkShadow:
+          darkShadow ??
+          _mixShadow(baseColor, const Color(0xFF1B2030), 0.62, 0.32),
+      depth: depth,
+      radius: radius,
+    );
+  }
+
+  /// Creates a dark neumorphic theme.
+  ///
+  /// [baseColor] defaults to a deep blue-grey. When [lightShadow] or
+  /// [darkShadow] is null, the color is derived from [baseColor]: a faint
+  /// top-left highlight and a deep bottom-right shadow.
+  factory AtomicTheme.dark({
+    Color baseColor = const Color(0xFF242A33),
+    Color? lightShadow,
+    Color? darkShadow,
+    double depth = defaultDepth,
+    double radius = 16,
+  }) {
+    return AtomicTheme(
+      baseColor: baseColor,
+      lightShadow:
+          lightShadow ?? _mixShadow(baseColor, Colors.white, 0.24, 0.10),
+      darkShadow: darkShadow ?? _mixShadow(baseColor, Colors.black, 0.62, 0.55),
+      depth: depth,
+      radius: radius,
+    );
+  }
 
   /// Default color of the light neumorphic shadow at the top left.
   static const Color defaultLightShadow = Color.fromRGBO(134, 134, 134, 0.05);
@@ -174,4 +223,8 @@ class AtomicTheme extends ThemeExtension<AtomicTheme> {
   @override
   int get hashCode =>
       Object.hash(baseColor, lightShadow, darkShadow, depth, radius);
+}
+
+Color _mixShadow(Color base, Color target, double amount, double alpha) {
+  return Color.lerp(base, target, amount)!.withValues(alpha: alpha);
 }
