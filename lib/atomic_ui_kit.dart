@@ -5,6 +5,7 @@ library;
 
 export 'src/animated_list_item.dart';
 export 'src/app_flat_button.dart';
+export 'src/atomic_text_field.dart';
 export 'src/atomic_theme.dart';
 export 'src/dropdown_menu_icon.dart';
 export 'src/gradient_text.dart';
