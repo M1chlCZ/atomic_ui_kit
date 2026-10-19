@@ -15,6 +15,9 @@ plugins.
 | `NeumorphicProgress` | Linear progress bar with the neu shadows. |
 | `NeuTheme` | `ThemeExtension` with the shared neu shadows, background color, and radius. |
 | `AtomicTheme` | `ThemeExtension` with the base color, shadow colors, depth, and radius. |
+| `AtomicTextField` | Inset neumorphic text field with a label, hint, error text, and icons. |
+| `AtomicSegmentedControl` | Animated pill selector with keyboard and semantics support. |
+| `PressableScale` | Scales its child down while pressed. |
 | `AppFlatButton` | Flat button with an ink splash and an optional border. |
 | `GradientText` | Paints text with a `Gradient` through a `ShaderMask`. |
 | `Indicator` | Colored shape followed by a bold label. |
@@ -105,6 +108,21 @@ depth of `1` reproduces the original shadows exactly. `AtomicTheme.of(context)`
 returns the registered extension, or the default values when the app registers
 none.
 
+`AtomicTheme.light()` and `AtomicTheme.dark()` build ready-made palettes. They
+derive the shadow colors from the base color and use a radius of `16`:
+
+```dart
+MaterialApp(
+  theme: ThemeData(
+    extensions: <ThemeExtension<dynamic>>[AtomicTheme.dark()],
+  ),
+  home: const NeumorphicCard(child: Text('Dark preset')),
+);
+```
+
+Pass a `baseColor`, `lightShadow`, `darkShadow`, `depth`, or `radius` to adjust
+a preset.
+
 ## NeumorphicCard
 
 `NeumorphicCard` paints the neu shadows behind a rounded surface and pads its
@@ -135,6 +153,58 @@ NeumorphicProgress(
 The bar paints the neu shadows by default and reads the theme. `color` sets
 the filled part and `trackColor` sets the track. The bar announces its
 percentage value to assistive technologies.
+
+## AtomicTextField
+
+`AtomicTextField` draws a neumorphic inset field. The dark shadow sits at the
+top left and the light shadow at the bottom right; focus strengthens both:
+
+```dart
+AtomicTextField(
+  label: 'E-mail',
+  hint: 'you@example.com',
+  prefixIcon: Icon(Icons.mail_outline),
+  errorText: 'Enter an e-mail address.',
+);
+```
+
+`controller`, `focusNode`, `maxLines`, `obscureText`, `keyboardType`,
+`onChanged`, and `onSubmitted` work like their `TextField` counterparts.
+
+## AtomicSegmentedControl
+
+`AtomicSegmentedControl` shows a row of options with an animated indicator
+behind the selected one:
+
+```dart
+AtomicSegmentedControl<String>(
+  segments: const [
+    AtomicSegment(value: '1D', label: '1D'),
+    AtomicSegment(value: '1W', label: '1W'),
+    AtomicSegment(value: '1M', label: '1M'),
+  ],
+  selected: period,
+  onChanged: (value) => setState(() => period = value),
+);
+```
+
+The control announces each segment with its selected state. Tap a segment, or
+focus the control and press the left and right arrow keys. Set `enabled` to
+`false` to ignore input.
+
+## PressableScale
+
+`PressableScale` adds a press-down scale to any widget:
+
+```dart
+PressableScale(
+  onPressed: () {},
+  child: const NeumorphicCard(child: Text('Tap me')),
+);
+```
+
+The wrapper is a gesture target, so wrap content that does not handle taps
+itself. When the platform asks for reduced motion, the child does not scale.
 
 ## Platforms
 

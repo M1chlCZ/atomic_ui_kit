@@ -2,7 +2,15 @@
 
 - Added `AtomicTheme`, a `ThemeExtension` with the shared base color, light
   and dark shadow colors, depth and radius, plus `AtomicTheme.of(context)`.
+- Added the `AtomicTheme.light` and `AtomicTheme.dark` presets with shadow
+  colors derived from the base color.
 - Added the `NeumorphicCard` and `NeumorphicProgress` components.
+- Added `AtomicTextField`, a neumorphic inset text field with a label, hint,
+  error text, prefix and suffix widgets, and a focus animation.
+- Added `AtomicSegmentedControl` and `AtomicSegment`, a pill selector with an
+  animated indicator, arrow-key movement and selected-state semantics.
+- Added `PressableScale`, a press-down scale wrapper that honors reduced
+  motion.
 - `NeuButton`, `NeuContainer`, `NeumorphicCard` and `NeumorphicProgress`
   resolve each value from the explicit argument, then `NeuTheme`, then
   `AtomicTheme`, then the built-in defaults.

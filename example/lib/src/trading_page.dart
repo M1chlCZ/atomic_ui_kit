@@ -218,10 +218,7 @@ class _BuySheetState extends State<BuySheet> {
                     children: [
                       const _SummaryRow(label: 'Amount', value: '1.500 ETH'),
                       const SizedBox(height: 14),
-                      const _SummaryRow(
-                        label: 'Price',
-                        value: '2 384.10 USDT',
-                      ),
+                      const _SummaryRow(label: 'Price', value: '2 384.10 USDT'),
                       const SizedBox(height: 14),
                       _SummaryRow(
                         label: 'Stake',

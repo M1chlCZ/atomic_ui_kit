@@ -17,6 +17,8 @@ class _ComponentsPageState extends State<ComponentsPage> {
   double _stake = 0.5;
   TimeRangeSwitchValue _range = TimeRangeSwitchValue.day;
   String _pair = 'ETH/USDT';
+  String _period = '1W';
+  var _presses = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -150,6 +152,56 @@ class _ComponentsPageState extends State<ComponentsPage> {
                   height: 14,
                 ),
               ],
+            ),
+          ),
+          const SizedBox(height: 26),
+
+          const SectionTitle('Text field & segmented control'),
+          AtomicTextField(
+            label: 'E-mail',
+            hint: 'you@example.com',
+            prefixIcon: const Icon(
+              Icons.mail_outline,
+              size: 18,
+              color: Colors.white54,
+            ),
+          ),
+          const SizedBox(height: 16),
+          AtomicSegmentedControl<String>(
+            segments: const [
+              AtomicSegment(value: '1D', label: '1D'),
+              AtomicSegment(value: '1W', label: '1W'),
+              AtomicSegment(value: '1M', label: '1M'),
+              AtomicSegment(value: '1Y', label: '1Y'),
+            ],
+            selected: _period,
+            onChanged: (value) => setState(() => _period = value),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Period: $_period',
+            style: const TextStyle(color: Colors.white54, fontSize: 12),
+          ),
+          const SizedBox(height: 26),
+
+          const SectionTitle('Pressable scale'),
+          PressableScale(
+            onPressed: () => setState(() => _presses++),
+            semanticLabel: 'Press demo',
+            child: NeumorphicCard(
+              child: Row(
+                children: [
+                  const Icon(Icons.touch_app, color: accentColor),
+                  const SizedBox(width: 12),
+                  Text(
+                    'Pressed $_presses times',
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 26),
