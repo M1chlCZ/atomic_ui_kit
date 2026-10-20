@@ -129,6 +129,31 @@ class _ComponentsPageState extends State<ComponentsPage> {
           ),
           const SizedBox(height: 26),
 
+          const SectionTitle('Neumorphic card & progress'),
+          NeumorphicCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Monthly goal',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '${(_stake * 100).round()} % funded',
+                  style: const TextStyle(color: Colors.white54, fontSize: 12),
+                ),
+                const SizedBox(height: 14),
+                NeumorphicProgress(
+                  value: _stake,
+                  color: accentColor,
+                  height: 14,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 26),
+
           const SectionTitle('Percent switch'),
           NeuContainer(
             height: 84,

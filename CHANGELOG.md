@@ -1,3 +1,14 @@
+## [0.2.0] - 2026-10-20
+
+- Added `AtomicTheme`, a `ThemeExtension` with the shared base color, light
+  and dark shadow colors, depth and radius, plus `AtomicTheme.of(context)`.
+- Added the `NeumorphicCard` and `NeumorphicProgress` components.
+- `NeuButton`, `NeuContainer`, `NeumorphicCard` and `NeumorphicProgress`
+  resolve each value from the explicit argument, then `NeuTheme`, then
+  `AtomicTheme`, then the built-in defaults.
+- `depth` is the shadow offset and the blur radius is `depth * 4`, so the
+  default depth of `1` reproduces the previous shadows.
+
 ## 0.1.4
 
 - Documentation and internal cleanup.

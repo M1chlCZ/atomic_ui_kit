@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
+import 'atomic_theme.dart';
 import 'neu_theme.dart';
 
 /// A neumorphic button that reacts to taps with an ink splash.
 ///
 /// The button paints the neumorphic shadows on an outer [Container] and a
 /// rounded [Material] surface on top. Each value resolves from the explicit
-/// widget argument, then the ambient [NeuTheme] extension, then the neu
-/// defaults.
+/// widget argument, then the ambient [NeuTheme] extension, then the ambient
+/// [AtomicTheme] extension, then the built-in defaults.
 class NeuButton extends StatelessWidget {
   /// Creates a [NeuButton].
   ///
@@ -34,8 +35,8 @@ class NeuButton extends StatelessWidget {
 
   /// Background color of the button surface.
   ///
-  /// When null, the ambient [NeuTheme.keyBackgroundColor] is used, falling
-  /// back to [ThemeData.canvasColor].
+  /// When null, the button uses the ambient [NeuTheme.keyBackgroundColor],
+  /// then [AtomicTheme.baseColor], then [ThemeData.canvasColor].
   final Color? color;
 
   /// Called when the button is tapped.
@@ -70,7 +71,8 @@ class NeuButton extends StatelessWidget {
 
   /// Border radius of the button surface.
   ///
-  /// When null, the ambient [NeuTheme.borderRadius] is used.
+  /// When null, the button uses the ambient [NeuTheme.borderRadius], then
+  /// [AtomicTheme.radius].
   final double? radius;
 
   /// Gradient painted over the button content with [BlendMode.srcIn].
@@ -80,7 +82,8 @@ class NeuButton extends StatelessWidget {
 
   /// Shadows painted behind the button.
   ///
-  /// When null, the ambient [NeuTheme.keyShadows] are used.
+  /// When null, the button uses the ambient [NeuTheme.keyShadows], then the
+  /// shadows of [AtomicTheme].
   final List<BoxShadow>? shadows;
 
   /// Semantic label announced for the button.
@@ -90,16 +93,21 @@ class NeuButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).extension<NeuTheme>() ?? const NeuTheme();
-    final resolvedRadius = radius ?? theme.borderRadius;
+    final neuTheme = Theme.of(context).extension<NeuTheme>();
+    final atomicTheme = AtomicTheme.of(context);
+    final resolvedRadius =
+        radius ?? neuTheme?.borderRadius ?? atomicTheme.radius;
     final resolvedColor =
-        color ?? theme.keyBackgroundColor ?? Theme.of(context).canvasColor;
+        color ??
+        neuTheme?.keyBackgroundColor ??
+        atomicTheme.baseColor ??
+        Theme.of(context).canvasColor;
     final button = _getContainer(
       height,
       width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(resolvedRadius)),
-        boxShadow: shadows ?? theme.keyShadows,
+        boxShadow: AtomicTheme.resolveShadows(context, shadows: shadows),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(resolvedRadius)),
