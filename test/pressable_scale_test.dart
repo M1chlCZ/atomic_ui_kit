@@ -1,5 +1,6 @@
 import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Widget host(Widget child, {bool reduceMotion = false}) {
@@ -90,5 +91,22 @@ void main() {
     await tester.pump();
     expect(tester.widget<AnimatedScale>(find.byType(AnimatedScale)).scale, 1.0);
     await gesture.up();
+  });
+
+  testWidgets('activates with Enter when focused', (tester) async {
+    var presses = 0;
+    await tester.pumpWidget(
+      host(
+        PressableScale(
+          onPressed: () => presses++,
+          child: const SizedBox(width: 80, height: 80),
+        ),
+      ),
+    );
+    await tester.tap(find.byType(PressableScale));
+    await tester.pumpAndSettle();
+    await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+    await tester.pumpAndSettle();
+    expect(presses, 2);
   });
 }

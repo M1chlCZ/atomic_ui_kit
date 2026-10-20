@@ -116,7 +116,10 @@ class _AtomicSegmentedControlState<T> extends State<AtomicSegmentedControl<T>> {
       return KeyEventResult.ignored;
     }
     final count = widget.segments.length;
-    _select((_selectedIndex + delta + count) % count);
+    final step = Directionality.of(context) == TextDirection.rtl
+        ? -delta
+        : delta;
+    _select((_selectedIndex + step + count) % count);
     return KeyEventResult.handled;
   }
 
@@ -137,9 +140,11 @@ class _AtomicSegmentedControlState<T> extends State<AtomicSegmentedControl<T>> {
         : const Duration(milliseconds: 220);
     final count = widget.segments.length;
     final selectedIndex = _selectedIndex;
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
+    final horizontal = count == 1 ? 0.0 : -1 + 2 * selectedIndex / (count - 1);
     final alignment = count == 1
         ? Alignment.center
-        : Alignment(-1 + 2 * selectedIndex / (count - 1), 0);
+        : Alignment(isRtl ? -horizontal : horizontal, 0);
     final indicatorRadius = (radius - 4).clamp(0.0, double.infinity);
     final control = Container(
       height: widget.height,

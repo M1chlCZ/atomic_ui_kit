@@ -112,4 +112,52 @@ void main() {
     );
     expect(first.properties.selected, isTrue);
   });
+
+  testWidgets('mirrors the indicator in RTL layouts', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Directionality(
+          textDirection: TextDirection.rtl,
+          child: Scaffold(
+            body: AtomicSegmentedControl<String>(
+              segments: segments,
+              selected: '1W',
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      ),
+    );
+    final align = tester.widget<AnimatedAlign>(find.byType(AnimatedAlign));
+    expect((align.alignment as Alignment).x, closeTo(1 / 3, 0.001));
+  });
+
+  testWidgets('moves toward the start with the right arrow in RTL', (
+    tester,
+  ) async {
+    final changes = <String>[];
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Directionality(
+          textDirection: TextDirection.rtl,
+          child: Scaffold(
+            body: StatefulBuilder(
+              builder: (context, setState) {
+                return AtomicSegmentedControl<String>(
+                  segments: segments,
+                  selected: changes.isEmpty ? '1W' : changes.last,
+                  onChanged: (value) => setState(() => changes.add(value)),
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('1W'));
+    await tester.pumpAndSettle();
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.pumpAndSettle();
+    expect(changes, <String>['1D']);
+  });
 }

@@ -127,6 +127,7 @@ class _AtomicTextFieldState extends State<AtomicTextField> {
       _focusNode = FocusNode();
       _ownsFocusNode = true;
     }
+    _focused = _focusNode.hasFocus;
     _focusNode.addListener(_handleFocusChange);
   }
 

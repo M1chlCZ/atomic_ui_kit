@@ -71,4 +71,24 @@ void main() {
     await tester.testTextInput.receiveAction(TextInputAction.done);
     expect(submitted, 'ping');
   });
+
+  testWidgets('adopts a new focus node when the widget updates', (
+    tester,
+  ) async {
+    final first = FocusNode();
+    final second = FocusNode();
+    addTearDown(first.dispose);
+    addTearDown(second.dispose);
+
+    await tester.pumpWidget(host(AtomicTextField(focusNode: first)));
+    first.requestFocus();
+    await tester.pump();
+    await tester.pumpWidget(host(AtomicTextField(focusNode: second)));
+    await tester.pump();
+
+    expect(
+      tester.widget<TextField>(find.byType(TextField)).focusNode,
+      same(second),
+    );
+  });
 }
