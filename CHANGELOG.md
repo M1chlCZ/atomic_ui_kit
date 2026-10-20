@@ -1,3 +1,8 @@
+## 0.2.1
+
+- Fix the README screenshot on pub.dev. pub.dev removes raw HTML images, so
+  the gallery now uses Markdown with an absolute URL and a smaller file.
+
 ## [0.2.0] - 2026-10-20
 
 - Added `AtomicTheme`, a `ThemeExtension` with the shared base color, light

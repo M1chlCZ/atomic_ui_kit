@@ -218,6 +218,4 @@ components gallery and a trading dashboard.
 
 ## Screenshots
 
-<p>
-  <img src="screenshots/components.png" width="240" alt="Widget gallery" />
-</p>
+![Widget gallery](https://raw.githubusercontent.com/M1chlCZ/atomic_ui_kit/main/screenshots/components.png)
