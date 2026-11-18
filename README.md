@@ -1,9 +1,9 @@
 # atomic_ui_kit
 
 A small kit of domain-free Flutter widgets: neumorphic buttons and containers,
-gradient text, switches, badges, and more. The widgets use only Flutter and
-`decimal`. They do not know about app models, state management, or platform
-plugins.
+gradient text, switches, badges and other small widgets. The widgets use only
+Flutter and `decimal`, and they know nothing about app models, state management
+or platform plugins.
 
 ## Widgets
 
@@ -164,7 +164,7 @@ AtomicTextField(
   label: 'E-mail',
   hint: 'you@example.com',
   prefixIcon: Icon(Icons.mail_outline),
-  errorText: 'Enter an e-mail address.',
+  errorText: 'Enter an email address.',
 );
 ```
 
