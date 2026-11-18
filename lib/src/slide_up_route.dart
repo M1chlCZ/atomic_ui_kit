@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Creates a route that slides [page] up from the bottom of the screen.
 Route<T> slideUpRoute<T>(Widget page) {

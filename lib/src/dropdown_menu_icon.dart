@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A button that opens a dropdown menu in an overlay and reports the selected
 /// item.

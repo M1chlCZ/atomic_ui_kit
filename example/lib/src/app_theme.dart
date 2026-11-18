@@ -1,6 +1,6 @@
 import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:decimal/decimal.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 const Color canvasColor = Color(0xFF1E2638);
 const Color keyColor = Color(0xFF252F45);

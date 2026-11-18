@@ -1,3 +1,8 @@
+## 0.3.0
+
+- Require Flutter 3.47 and Dart 3.13.
+- Use the `material_ui` package for Material widgets.
+
 ## 0.2.1
 
 - Fix the README screenshot on pub.dev. pub.dev removes raw HTML images, so

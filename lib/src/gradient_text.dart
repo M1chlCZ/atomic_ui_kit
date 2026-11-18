@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Text painted with a [Gradient] through a [ShaderMask].
 class GradientText extends StatelessWidget {
